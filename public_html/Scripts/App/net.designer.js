@@ -296,9 +296,40 @@ function runNetModelSimulation() {
 	}
 	var cuDuration = parseInt(cuDurStr);
 	var enableAnimation = $('#enableAnimationChbx').is(':checked');
+  const payload = { net: currentPetriNet, duration }; //, animationDuration, cuDuration, enableAnimation];
+  fetch('http://localhost:8080/simulator', {
+    method: 'post',
+    body: JSON.stringify(payload),
+  }).then(res => res.json()).then(dat => {
+    console.log(dat);
+    net = currentPetriNet;
+    for (var i = 0; i < net.places.length; i++) {
+      net.places[i].markers = dat.places[i].markers;
+      net.places[i].stats = dat.places[i].stats;
+    }
+    for (var i = 0; i < net.transitions.length; i++) {
+      net.transitions[i].stats = dat.transitions[i].stats;
+      net.transitions[i].outputTimesBuffer = dat.transitions[i].outputTimesBuffer;
+    }
+    console.log(net);
+    performFinalActions();
+  });
+  /*
 	setTimeout(function() {
 		runSimulationForNet(currentPetriNet, duration, animationDuration, cuDuration, enableAnimation);
 	}, 0);
+  */
+}
+
+function addPrototypes(net) {
+  const res = Object.create(PetriNet.prototype);
+  Object.assign(res, net);
+  for (var i = 0; i < res.places.length; i++) {
+    const newObj = Object.create(Place.prototype);
+    Object.assign(newObj, res.places[i]);
+    res.places[i] = newObj;
+  }
+  return res;
 }
 
 function deleteArc(id) {

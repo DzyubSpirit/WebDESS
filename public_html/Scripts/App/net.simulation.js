@@ -63,12 +63,12 @@ function updateStatsForTransitions(displayChanges, isLastUpdate, prevTime, nextT
 				}
 			}
 		}
-		if (displayChanges) {
+	  if (displayChanges) {
 			$('#minForTransition' + transition.id).text(transition.stats.min);
 			$('#maxForTransition' + transition.id).text(transition.stats.max);
 			$('#avgForTransition' + transition.id).text(transition.stats.avg.toFixed(2));
 		}
-	}
+  }
 }
 
 function updateStatsForPlaces(displayChanges, isLastUpdate, prevTime, nextTime) {
