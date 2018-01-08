@@ -1,0 +1,20 @@
+N - количество вершин
+K - количесвто ребер
+M - количество маркеров
+
+N = 19, K ≈ 40, M ≈ 1000
+
+Frontend:
+30ms
+
+Java (measure from frontend):
+160ms
+
+Go (measure from frontend):
+190ms
+
+Java (measure from backend):
+90
+
+Go (measure from backend):
+180ms

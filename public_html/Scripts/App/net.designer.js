@@ -22,6 +22,7 @@ currentPetriNet.id = newPetriNetId;
 var programmingDialog, animationSettingsDialog;
 var needToStop;
 var net;
+var startTime;
 
 function requestStop() {
 	needToStop = true;
@@ -297,6 +298,7 @@ function runNetModelSimulation() {
 	var cuDuration = parseInt(cuDurStr);
 	var enableAnimation = $('#enableAnimationChbx').is(':checked');
   const payload = { net: currentPetriNet, duration }; //, animationDuration, cuDuration, enableAnimation];
+  startTime = Date.now();
   fetch('http://localhost:8080/simulator', {
     method: 'post',
     body: JSON.stringify(payload),
@@ -305,6 +307,7 @@ function runNetModelSimulation() {
         res.json():
   		Promise.reject(res.text());
   }).then(dat => {
+    $('.stats').append('<div class="stats-title">Time elapsed: ' + getTimeString(Date.now() - startTime) + '</div>');
     console.log(dat);
     net = currentPetriNet;
     for (var i = 0; i < net.places.length; i++) {
