@@ -300,7 +300,11 @@ function runNetModelSimulation() {
   fetch('http://localhost:8080/simulator', {
     method: 'post',
     body: JSON.stringify(payload),
-  }).then(res => res.json()).then(dat => {
+  }).then(res => {
+  	return res.status === 200 ?
+        res.json():
+  		Promise.reject(res.text());
+  }).then(dat => {
     console.log(dat);
     net = currentPetriNet;
     for (var i = 0; i < net.places.length; i++) {
@@ -313,6 +317,8 @@ function runNetModelSimulation() {
     }
     console.log(net);
     performFinalActions();
+  }).catch(err => {
+  	console.log('Error: ', err);
   });
   /*
 	setTimeout(function() {
